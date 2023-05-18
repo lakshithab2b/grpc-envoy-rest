@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package proto;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+message User {
+  string id = 1;
+  string name = 2;
+  uint32 age = 3;
+  string type = 4;
+}
+
+message CreateRequest {
+  string name = 1;
+  uint32 age = 2;
+}
+
+message CreateResponse {
+  User user = 1;
+}
+
+message ListResponse {
+  repeated User users = 1;
+}
+
+service UserService {
+  rpc List(google.protobuf.Empty) returns (ListResponse) {
+    option (google.api.http) = {get: "/list"};
+  }
+
+  rpc Create(CreateRequest) returns (CreateResponse) {
+    option (google.api.http) = {
+      post: "/create",
+      body: '*'
+    };
+  }
+}
